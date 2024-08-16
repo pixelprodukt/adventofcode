@@ -1,6 +1,6 @@
 package org.example.dayone
 
-import java.nio.file.Paths
+import org.example.utils.getLinesFromTextfile
 
 class ExtractNumbersFromTextlinesParser(
     private val fileName: String
@@ -54,17 +54,6 @@ class ExtractNumbersFromTextlinesParser(
             str
         } else {
             wordToNumberCharMapping[str] ?: throw IllegalArgumentException("No mapping for number name found: $str")
-        }
-    }
-
-    private fun getLinesFromTextfile(fileName: String): List<String> {
-        val filePath = Paths.get("src/main/resources", fileName).toFile()
-
-        return try {
-            filePath.readLines()
-        } catch (e: Exception) {
-            println("An error occurred: ${e.message}")
-            emptyList()
         }
     }
 }
