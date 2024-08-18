@@ -2,8 +2,9 @@ package org.example.daytwo
 
 import org.example.utils.getLinesFromTextfile
 
+// refactor me please
 class CubeDataAnalyzer(
-    private val fileName: String
+    fileName: String
 ) {
     private val inputLines = getLinesFromTextfile(fileName)
     private val rulesForPossibleGames = listOf(SetOfCubes(12, CubeColor.RED), SetOfCubes(13, CubeColor.GREEN), SetOfCubes(14, CubeColor.BLUE))
@@ -14,8 +15,8 @@ class CubeDataAnalyzer(
         val possibleGames = games.filter { game -> isPossible(game, possibleCubeColors) }
         val result = possibleGames.map { game -> game.id }.sum()
         //println("The result is: $result") // should return 2239
-        val resultTwo = possibleGames.map { game -> getFewestPossibleCubeSets(game, possibleCubeColors)}.sum()
-        println(resultTwo)
+        val resultTwo = games.map { game -> getFewestPossibleCubeSets(game, possibleCubeColors)}.sum()
+        println(resultTwo) // should return 83435
     }
 
     fun parseInputLines(lines: List<String>): List<GameOfCubes> {
@@ -67,7 +68,7 @@ class CubeDataAnalyzer(
         val sorted = setsOfCubesOneColor.map { setsOfCubes ->
             setsOfCubes.sortedBy { set -> set.quantity }.last()
         }
-        println(sorted)
+        //println(sorted)
         val powerOfSets = sorted.map { it.quantity }.reduce(Int::times)
 
         return powerOfSets
@@ -87,12 +88,4 @@ class CubeDataAnalyzer(
         }
         return true
     }
-}
-
-data class GameOfCubes(val id: Int, val setsOfCubesList: List<List<SetOfCubes>>)
-
-data class SetOfCubes(val quantity: Int, val color: CubeColor)
-
-enum class CubeColor {
-    RED, BLUE, YELLOW, GREEN, BLACK
 }

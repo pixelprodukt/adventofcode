@@ -1,6 +1,7 @@
 package org.example
 
 import org.example.dayone.ExtractNumbersFromTextlinesParser
+import org.example.daythree.MachinePartNumberFinder
 import org.example.daytwo.CubeDataAnalyzer
 
 fun main() {
@@ -8,6 +9,8 @@ fun main() {
     println(sumOfDayOne)
 
     val cubeDataAnalyzer = CubeDataAnalyzer("input_day_two.txt")
+
+    val machinePartNumberFinder = MachinePartNumberFinder("input_day_three.txt")
 }
 
 
