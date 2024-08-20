@@ -8,11 +8,7 @@ class MachinePartNumberFinder(
     private val inputLines = getLinesFromTextfile(fileName)
 
     init {
-        val charMatrix = mutableListOf<MutableList<Char>>()
-        inputLines.forEach { line ->
-            println(line.map { it })
-            charMatrix.add(line.map { it }.toMutableList())
-        }
+        val charMatrix = inputLines.map { it.toList() }
 
         val machinePartNumbersToAdd = mutableListOf<Int>()
         var yPos = 0
@@ -78,21 +74,24 @@ class MachinePartNumberFinder(
     }
 
     private fun isSpecialCharacter(character: Char?): Boolean {
-        val pattern = "[!@#$%&*()/_+=|<>?{}\\[\\]~-]"
-        return Regex(pattern).containsMatchIn(character.toString())
+        return character != null && character in "!@#$%&*()/_+=|<>?{}[]~-"
     }
 
     private fun lineHasSymbol(line: List<Char>, xPos: Int): Boolean {
-        val leftChar = if(xPos - 1 < 0) ".".toCharArray().first() else line[xPos - 1]
+        val leftChar = line.getOrNull(xPos - 1) ?: '.'
         val middleChar = line[xPos]
-        val rightChar = if(xPos + 1 < line.size) line[xPos + 1] else ".".toCharArray().first()
+        val rightChar = line.getOrNull(xPos + 1) ?: '.'
 
-        println("symbolInNeighboursFound in bottom:  ${listOf(leftChar, middleChar, rightChar)}")
+        return listOf(leftChar, middleChar, rightChar).any { isSpecialCharacter(it) }
+    }
 
-        return listOf(
-            isSpecialCharacter(leftChar),
-            isSpecialCharacter(middleChar),
-            isSpecialCharacter(rightChar)
-        ).contains(true)
+    private fun checkNeighborsForSymbols(charMatrix: List<List<Char>>, yPos: Int, xPos: Int): Boolean {
+        val topLine = charMatrix.getOrNull(yPos - 1)
+        val currentLine = charMatrix[yPos]
+        val bottomLine = charMatrix.getOrNull(yPos + 1)
+
+        return listOf(topLine, currentLine, bottomLine).any { line ->
+            line?.let { lineHasSymbol(it, xPos) } == true
+        }
     }
 }
