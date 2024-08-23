@@ -21,7 +21,47 @@ class MachinePartNumberFinder(
      * Wrong
      */
     private fun findAllAndAddGearRatios(matrix: List<List<Char>>): Int {
+        var yPos = 0
+        var xPos = 0
+
+        while (yPos < matrix.size) {
+            val line = matrix[yPos]
+
+            while (xPos < line.size) {
+                val character = line[xPos]
+
+                if (isTimesOperator(character)) {
+                    val topLine = matrix.getOrNull(yPos - 1)
+                    val charTopLeft = topLine?.getOrNull(xPos - 1)
+
+                    if (topLine != null && charTopLeft != null) {
+                        if (isDigit(charTopLeft)) {
+                            val gearDigits = mutableListOf(charTopLeft)
+                            var xLeftIndex = 0
+
+                            // go left as long you find a digit
+                            // put every found digit at the start of gearDigits
+                            // afterwards go right as long as you find a digit
+                            // put every found digit at the end of gearDigits
+                        }
+                    }
+                }
+
+                xPos++
+            }
+
+            yPos++
+        }
+
         return 0
+    }
+
+    private fun isDigit(character: Char): Boolean {
+        return character.toString().toIntOrNull() is Int
+    }
+
+    private fun isTimesOperator(character: Char): Boolean {
+        return character.toString() == "*"
     }
 
     /**
