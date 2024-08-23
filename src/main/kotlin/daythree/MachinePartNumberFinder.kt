@@ -10,13 +10,32 @@ class MachinePartNumberFinder(
     init {
         val charMatrix = inputLines.map { it.toList() }
 
+        val sumOfMachinePartNumbers = findAndAddAllMachineParts(charMatrix)
+        println("sum of all numbers: ${sumOfMachinePartNumbers}") // should be 520019
+
+        val sumOfGearNumbers = findAllAndAddGearRatios(charMatrix)
+        println("sum of all gear ratios: ${sumOfGearNumbers}") // should be
+    }
+
+    /**
+     * Wrong
+     */
+    private fun findAllAndAddGearRatios(matrix: List<List<Char>>): Int {
+        return 0
+    }
+
+    /**
+     * A machine part number is a number from the input, which is adjacent to a special symbol
+     * like '$', '*' or '#' for example. The sum of all those numbers is the solution.
+     */
+    private fun findAndAddAllMachineParts(matrix: List<List<Char>>): Int {
         val machinePartNumbersToAdd = mutableListOf<Int>()
         var yPos = 0
         var xPos = 0
 
-        while (yPos < charMatrix.size) {
+        while (yPos < matrix.size) {
             val lastFoundNumberCache = mutableListOf<Char>()
-            val currentLine = charMatrix[yPos]
+            val currentLine = matrix[yPos]
             val symbolsFound = mutableListOf<Boolean>()
             xPos = 0 // reset x here for next line
 
@@ -32,7 +51,7 @@ class MachinePartNumberFinder(
 
                     // top line
                     if (yPos - 1 > 0) {
-                        val topLine = charMatrix[yPos - 1]
+                        val topLine = matrix[yPos - 1]
                         symbolsFound.add(lineHasSymbol(topLine, xPos))
                     }
 
@@ -40,8 +59,8 @@ class MachinePartNumberFinder(
                     symbolsFound.add(lineHasSymbol(currentLine, xPos))
 
                     // bottom line
-                    if (yPos + 1 < charMatrix.size) {
-                        val bottomLine = charMatrix[yPos + 1]
+                    if (yPos + 1 < matrix.size) {
+                        val bottomLine = matrix[yPos + 1]
                         symbolsFound.add(lineHasSymbol(bottomLine, xPos))
                     }
 
@@ -58,15 +77,12 @@ class MachinePartNumberFinder(
                         symbolsFound.clear()
                     }
                 }
-
                 xPos++
             }
-
             yPos++
         }
-
         println("machine part numbers: ${machinePartNumbersToAdd}")
-        println("sum of all numbers: ${machinePartNumbersToAdd.sum()}") // should return 520019
+        return machinePartNumbersToAdd.sum()
     }
 
     private fun isPartOfMachineNumber(character: Char?): Boolean {
@@ -83,15 +99,5 @@ class MachinePartNumberFinder(
         val rightChar = line.getOrNull(xPos + 1) ?: '.'
 
         return listOf(leftChar, middleChar, rightChar).any { isSpecialCharacter(it) }
-    }
-
-    private fun checkNeighborsForSymbols(charMatrix: List<List<Char>>, yPos: Int, xPos: Int): Boolean {
-        val topLine = charMatrix.getOrNull(yPos - 1)
-        val currentLine = charMatrix[yPos]
-        val bottomLine = charMatrix.getOrNull(yPos + 1)
-
-        return listOf(topLine, currentLine, bottomLine).any { line ->
-            line?.let { lineHasSymbol(it, xPos) } == true
-        }
     }
 }
