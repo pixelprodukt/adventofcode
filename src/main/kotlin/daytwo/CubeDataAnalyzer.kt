@@ -9,14 +9,19 @@ class CubeDataAnalyzer(
     private val inputLines = getLinesFromTextfile(fileName)
     private val rulesForPossibleGames = listOf(SetOfCubes(12, CubeColor.RED), SetOfCubes(13, CubeColor.GREEN), SetOfCubes(14, CubeColor.BLUE))
 
-    init {
+    // should return 2239
+    fun getPossibleGamesResultPartOne(): Int {
         val games = parseInputLines(inputLines)
         val possibleCubeColors = getPossibleCubeColors(rulesForPossibleGames)
         val possibleGames = games.filter { game -> isPossible(game, possibleCubeColors) }
-        val result = possibleGames.map { game -> game.id }.sum()
-        //println("The result is: $result") // should return 2239
-        val resultTwo = games.map { game -> getFewestPossibleCubeSets(game, possibleCubeColors)}.sum()
-        println(resultTwo) // should return 83435
+        return possibleGames.map { game -> game.id }.sum()
+    }
+
+    // should return 83435
+    fun getPossibleGamesResultPartTwo(): Int {
+        val games = parseInputLines(inputLines)
+        val possibleCubeColors = getPossibleCubeColors(rulesForPossibleGames)
+        return games.map { game -> getFewestPossibleCubeSets(game, possibleCubeColors)}.sum()
     }
 
     fun parseInputLines(lines: List<String>): List<GameOfCubes> {
